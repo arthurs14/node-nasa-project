@@ -1,13 +1,15 @@
 // Packages
 const express = require("express");
+const cors = require("cors");
 
-// Local File Imports
+// File Imports
 const planetsRouter = require("./routes/planets/planets.router");
 
 /* --- START OF FILE --- */
 const app = express();
 
 // MIDDLEWARE
+app.use(cors());
 app.use(express.json());
 
 // ROUTES
