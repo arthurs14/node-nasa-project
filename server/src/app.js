@@ -6,6 +6,7 @@ const morgan = require("morgan");
 
 // File Imports
 const planetsRouter = require("./routes/planets/planets.router");
+const launchesRouter = require("./routes/launches/launches.router");
 
 /* --- START OF FILE --- */
 const app = express();
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 
 // ROUTES
 app.use(planetsRouter);
+app.use(launchesRouter);
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "..", "public", "index.html"))
 );
