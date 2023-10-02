@@ -1,4 +1,4 @@
-const { getAllLaunches } = require("../../models/launches.model");
+const { getAllLaunches, addNewLaunch } = require("../../models/launches.model");
 
 function httpGetAllLaunches(req, res) {
   try {
@@ -8,4 +8,18 @@ function httpGetAllLaunches(req, res) {
   }
 }
 
-module.exports = { httpGetAllLaunches };
+function httpAddNewLaunch(req, res) {
+  try {
+    const launch = req.body;
+
+    launch.launchDate = new Date(launch.launchDate);
+
+    addNewLaunch(launch);
+
+    return res.status(201).json(launch);
+  } catch (e) {
+    res.status(400).json({ status: "fail", message: e });
+  }
+}
+
+module.exports = { httpGetAllLaunches, httpAddNewLaunch };
