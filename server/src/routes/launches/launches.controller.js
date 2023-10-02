@@ -1,11 +1,11 @@
-const { launches } = require("../../models/launches.model");
+const { getAllLaunches } = require("../../models/launches.model");
 
-function getAllLaunches(req, res) {
+function httpGetAllLaunches(req, res) {
   try {
-    return res.status(200).json(Array.from(launches.values()));
+    return res.status(200).json(getAllLaunches());
   } catch (e) {
     res.status(400).json({ status: "fail", message: e });
   }
 }
 
-module.exports = { getAllLaunches };
+module.exports = { httpGetAllLaunches };
