@@ -1,6 +1,6 @@
 # Node Nasa Launch Project
 
-This project focuses on building a backend with Node.js and Express to interact with a React front end.
+This project focuses on building a backend with Node.js and Express to interact with a pre-made React front end.
 
 ## Steps to Run
 
