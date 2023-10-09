@@ -17,8 +17,12 @@ const launch = {
 
 saveLaunch(launch);
 
-function launchExists(launchId) {
-  return launches.has(launchId);
+async function launchExists(launchId) {
+  try {
+    return await launchesDatabase.findOne({ flightNumber: launchId });
+  } catch (e) {
+    console.error(`Could not check if launch exists - ${e}`);
+  }
 }
 
 async function getLatestFlightNumber() {
@@ -80,11 +84,17 @@ async function scheduleNewLaunch(launch) {
   }
 }
 
-function abortLaunch(launchId) {
-  const aborted = launches.get(launchId);
-  aborted.upcoming = false;
-  aborted.success = false;
-  return aborted;
+async function abortLaunch(launchId) {
+  try {
+    const aborted = await launchesDatabase.updateOne(
+      { flightNumber: launchId },
+      { upcoming: false, success: false }
+    );
+
+    return aborted.modifiedCount === 1;
+  } catch (e) {
+    console.error(`Could not abort launch - ${e}`);
+  }
 }
 
 module.exports = {
