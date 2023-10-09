@@ -13,7 +13,7 @@ async function httpGetAllLaunches(req, res) {
   }
 }
 
-function httpAddNewLaunch(req, res) {
+async function httpAddNewLaunch(req, res) {
   try {
     const launch = req.body;
 
@@ -34,9 +34,7 @@ function httpAddNewLaunch(req, res) {
       return res.status(400).json({ error: "Invalid launch date" });
     }
 
-    scheduleNewLaunch(launch);
-
-    console.log(launch);
+    await scheduleNewLaunch(launch);
 
     return res.status(201).json(launch);
   } catch (e) {
