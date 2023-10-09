@@ -5,9 +5,9 @@ const {
   abortLaunch,
 } = require("../../models/launches.model");
 
-function httpGetAllLaunches(req, res) {
+async function httpGetAllLaunches(req, res) {
   try {
-    return res.status(200).json(getAllLaunches());
+    return res.status(200).json(await getAllLaunches());
   } catch (e) {
     res.status(400).json({ status: "fail", message: e });
   }
