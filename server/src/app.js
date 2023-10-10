@@ -3,12 +3,16 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const dotenv = require("dotenv");
 
 // File Imports
 const api = require("./routes/api");
 
 /* --- START OF FILE --- */
 const app = express();
+
+// ENVIRONMENT VARIABLES
+dotenv.config({ path: "../config.env" });
 
 // MIDDLEWARE
 app.use(
