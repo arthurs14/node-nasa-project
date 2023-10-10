@@ -5,7 +5,6 @@ const planets = require("./planets.mongo");
 
 // CONSTANTS
 const DEFAULT_FLIGHT_NUMBER = 100;
-const SPACEXAPI_URL = "https://api.spacexdata.com/v4/launches/query";
 
 // LAUNCH DATA
 const launch = {
@@ -21,53 +20,86 @@ const launch = {
 
 saveLaunch(launch);
 
+async function populateLaunches() {
+  try {
+    const response = await axios.post(process.env.SPACEX_API_URL, {
+      query: {},
+      options: {
+        pagination: false,
+        populate: [
+          {
+            path: "rocket",
+            select: {
+              name: 1,
+            },
+          },
+          {
+            path: "payloads",
+            select: {
+              customers: 1,
+            },
+          },
+        ],
+      },
+    });
+
+    const launchDocs = response.data.docs;
+
+    for (const launchDoc of launchDocs) {
+      const payloads = launchDoc.payloads;
+      const customers = payloads.flatMap((payload) => payload.customers);
+
+      const launch = {
+        flightNumber: launchDoc.flight_number,
+        mission: launchDoc.name,
+        rocket: launchDoc.rocket.name,
+        launchData: launchDoc.date_local,
+        // target: "",
+        customers,
+        upcoming: launchDoc.upcoming,
+        success: launchDoc.success,
+      };
+
+      console.log(`${launch.flightNumber} ${launch.mission}`);
+
+      // TODO: populate launches collection ...
+    }
+  } catch (e) {
+    console.error(`Could not populate launches from API - ${e}`);
+  }
+}
+
 async function loadLaunchData() {
-  console.log("Downloading launch data...");
+  try {
+    console.log("Downloading launch data...");
 
-  const response = await axios.post(SPACEXAPI_URL, {
-    query: {},
-    options: {
-      populate: [
-        {
-          path: "rocket",
-          select: {
-            name: 1,
-          },
-        },
-        {
-          path: "payloads",
-          select: {
-            customers: 1,
-          },
-        },
-      ],
-    },
-  });
+    const firstLaunch = await findLaunch({
+      flightNumber: 1,
+      rocket: "Falcon 1",
+      mission: "FalconSat",
+    });
 
-  const launchDocs = response.data.docs;
+    if (firstLaunch) {
+      console.log("Launch data already loaded!");
+    } else {
+      await populateLaunches();
+    }
+  } catch (e) {
+    console.error(`Cannot load launch data from API - ${e}`);
+  }
+}
 
-  for (const launchDoc of launchDocs) {
-    const payloads = launchDoc.payloads;
-    const customers = payloads.flatMap((payload) => payload.customers);
-
-    const launch = {
-      flightNumber: launchDoc.flight_number,
-      mission: launchDoc.name,
-      rocket: launchDoc.rocket.name,
-      launchData: launchDoc.date_local,
-      // target: "",
-      customers,
-      upcoming: launchDoc.upcoming,
-      success: launchDoc.success,
-    };
-
-    console.log(`${launch.flightNumber} ${launch.mission}`);
+async function findLaunch(filter) {
+  try {
+    return await launchesDatabase.findOne(filter);
+  } catch (e) {
+    console.error(`Could not find launch - ${e}`);
   }
 }
 
 async function launchExists(launchId) {
   try {
-    return await launchesDatabase.findOne({ flightNumber: launchId });
+    return await findLaunch({ flightNumber: launchId });
   } catch (e) {
     console.error(`Could not check if launch exists - ${e}`);
   }
