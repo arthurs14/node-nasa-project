@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+require("dotenv").config();
+
 const MONGO_URL = process.env.DATABASE.replace(
   "<password>",
   process.env.DB_PASSWORD
