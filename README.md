@@ -1,35 +1,33 @@
 # Node Nasa Launch Project
 
-This project focuses on building a backend with Node.js and Express to interact with a pre-made React front end.
+- This project focuses on building a backend with Node.js and Express to interact with a pre-made React front end.
+- This project runs inside a docker container
 
 ## Steps to Run
 
-Change Directory to `client`
+### Docker Desktop
+
+You must have Docker Desktop installed [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+### Environment Variables
+
+You must create a `.env` file in the root of your project directory with two environment variables: `DATABASE` and `SPACEX_API_URL`.
 
 ```bash
-cd client
+DATABASE=
+SPACEX_API_URL=
 ```
 
-Install `client` dependencies:
+### Run Docker Container
+
+Build docker image:
 
 ```bash
-npm install
+docker build . -t <username>/nasa-project
 ```
 
-In another terminal or same terminal change directory to `server`:
+Run Docker Image:
 
 ```bash
-cd ../server
-```
-
-Install `server` dependencies:
-
-```bash
-npm install
-```
-
-In root directory run to watch:
-
-```bash
-npm run watch
+docker run -it -p 8000:8000 <username>/nasaproject
 ```

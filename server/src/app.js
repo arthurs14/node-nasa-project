@@ -12,7 +12,7 @@ const api = require("./routes/api");
 const app = express();
 
 // ENVIRONMENT VARIABLES
-dotenv.config({ path: "../config.env" });
+dotenv.config({ path: "../.env" });
 
 // MIDDLEWARE
 app.use(

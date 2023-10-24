@@ -1,0 +1,6 @@
+# Things to exclude from Docker Image
+.git
+
+*/node_modules
+
+server/public
