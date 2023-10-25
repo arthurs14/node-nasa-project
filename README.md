@@ -1,7 +1,12 @@
 # Node Nasa Launch Project
 
-- This project focuses on building a backend with Node.js and Express to interact with a pre-made React front end.
-- This project runs inside a docker container
+- This project focuses on building a backend with Node.js and Express to interact with a pre-made React front-end inside a Docker container.
+
+## Requirements
+
+- Docker Desktop
+- MongoDB URL (request if needed)
+- SPACEX API URL (request if needed)
 
 ## Steps to Run
 
